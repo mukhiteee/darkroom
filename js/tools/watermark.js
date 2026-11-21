@@ -4,8 +4,14 @@ export function mountWatermarkTool(container, studio) {
   container.innerHTML = `
     <div class="tool-section">
       <div class="section-title">
-        <span>Watermark Overlay</span>
-        <label style="display:inline-flex; align-items:center; gap:0.4rem; cursor:pointer; font-size:0.78rem;">
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3H5a2 2 0 0 0-2 2v7l8.3 8.3a2.4 2.4 0 0 0 3.4 0l5.6-5.6a2.4 2.4 0 0 0 0-3.4L12 3Z"/>
+            <circle cx="7.5" cy="7.5" r="1.2"/>
+          </svg>
+          <span>Watermark Overlay</span>
+        </span>
+        <label style="display:inline-flex; align-items:center; gap:0.4rem; cursor:pointer; font-size:0.76rem; color:var(--text-primary);">
           <input type="checkbox" id="wmEnableCheck" />
           <span>Active</span>
         </label>
@@ -24,12 +30,12 @@ export function mountWatermarkTool(container, studio) {
         <label for="wmTextInput">Watermark Text</label>
         <input type="text" id="wmTextInput" class="input-control" value="© Darkroom" placeholder="e.g. © Mukhiteee / LensGrid" />
 
-        <div style="display:flex; align-items:center; gap:0.45rem; margin-top:0.35rem;">
-          <input type="color" id="wmColorInput" value="#FFFFFF" style="width:36px; height:30px; border:none; background:none; cursor:pointer;" />
+        <div style="display:flex; align-items:center; gap:0.4rem; margin-top:0.35rem; flex-wrap:wrap;">
+          <input type="color" id="wmColorInput" value="#FFFFFF" />
           <button class="btn-mini wm-swatch" data-color="#FFFFFF" type="button">White</button>
-          <button class="btn-mini wm-swatch" data-color="#18241C" type="button">Dark</button>
+          <button class="btn-mini wm-swatch" data-color="#0B0E0C" type="button">Obsidian</button>
           <button class="btn-mini wm-swatch" data-color="#F6E6AD" type="button">Butter</button>
-          <button class="btn-mini wm-swatch" data-color="#236B3D" type="button">Leaf</button>
+          <button class="btn-mini wm-swatch" data-color="#2D8A50" type="button">Leaf</button>
         </div>
       </div>
 
@@ -46,7 +52,16 @@ export function mountWatermarkTool(container, studio) {
 
     <div class="tool-section">
       <div class="section-title">
-        <span>Appearance &amp; Position</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 2v4"/>
+            <path d="M12 18v4"/>
+            <path d="M2 12h4"/>
+            <path d="M18 12h4"/>
+          </svg>
+          <span>Appearance &amp; Position</span>
+        </span>
       </div>
 
       <div id="wmPositionGroup" class="field-group">
@@ -63,7 +78,7 @@ export function mountWatermarkTool(container, studio) {
       <div class="field-group">
         <div class="field-label-row">
           <label for="wmOpacityRange">Opacity</label>
-          <span id="wmOpacityVal" class="badge-butter mono-text">55%</span>
+          <span id="wmOpacityVal" class="badge-butter tabular-nums">55%</span>
         </div>
         <input type="range" id="wmOpacityRange" min="0.1" max="1" step="0.05" value="0.55" />
       </div>
@@ -71,7 +86,7 @@ export function mountWatermarkTool(container, studio) {
       <div class="field-group">
         <div class="field-label-row">
           <label for="wmScaleRange">Scale / Size</label>
-          <span id="wmScaleVal" class="badge-butter mono-text">1.0×</span>
+          <span id="wmScaleVal" class="badge-butter tabular-nums">1.0×</span>
         </div>
         <input type="range" id="wmScaleRange" min="0.4" max="2.5" step="0.1" value="1" />
       </div>

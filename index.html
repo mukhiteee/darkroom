@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Darkroom — Local-First Browser Image Studio</title>
   <meta name="description" content="Offline-first browser image studio & PWA. Batch convert/compress, slice carousels, crop, watermark, strip EXIF/GPS metadata, generate favicons, extract HEX palettes, redact, and remove backgrounds locally." />
-  <meta name="theme-color" content="#236B3D" />
+  <meta name="theme-color" content="#0D110F" />
 
   <!-- Open Graph / Social Preview -->
   <meta property="og:type" content="website" />
@@ -20,7 +20,7 @@
   <link rel="manifest" href="./manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -28,30 +28,56 @@
     <!-- Top Studio Bar -->
     <header class="topbar">
       <div class="brand">
-        <img src="./favicon.svg" alt="Darkroom Aperture" class="brand-icon" />
-        <div>
+        <div class="brand-badge">
+          <img src="./favicon.svg" alt="Darkroom Aperture" class="brand-icon" />
+        </div>
+        <div class="brand-copy">
           <div class="brand-title">Darkroom</div>
-          <div class="brand-sub">LOCAL-FIRST IMAGE STUDIO</div>
+          <div class="brand-sub">LOCAL-FIRST STUDIO</div>
         </div>
       </div>
 
       <div class="topbar-meta" id="activeImageMeta">
-        No image loaded — drop files or paste (Ctrl+V)
+        <span class="status-dot"></span>
+        <span class="meta-label">No image loaded — drop files or press Ctrl+V</span>
       </div>
 
       <div class="topbar-actions">
         <button id="compareHoldBtn" class="btn btn-ghost btn-sm" type="button" disabled title="Hold to view original unedited image">
-          👁 Hold Original
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span>Hold Original</span>
         </button>
-        <button id="resetAllEditsBtn" class="btn btn-ghost btn-sm" type="button" disabled>
-          ↺ Reset Edits
+
+        <button id="resetAllEditsBtn" class="btn btn-ghost btn-sm" type="button" disabled title="Reset all adjustments on active image">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          <span>Reset</span>
         </button>
+
+        <div class="toolbar-divider"></div>
+
         <button id="addFilesBtn" class="btn btn-secondary btn-sm" type="button">
-          + Add Images
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14"/>
+            <path d="M5 12h14"/>
+          </svg>
+          <span>Add Images</span>
         </button>
+
         <button id="batchZipBtn" class="btn btn-primary btn-sm" type="button" disabled>
-          ↓ Export All (ZIP)
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 4v11"/>
+            <path d="m7 11 5 5 5-5"/>
+            <path d="M5 20h14"/>
+          </svg>
+          <span>Export All</span>
         </button>
+
         <input type="file" id="mainFileInput" accept="image/*" multiple hidden />
       </div>
     </header>
@@ -61,31 +87,79 @@
       <!-- Left Tool Rail -->
       <nav class="tool-rail" aria-label="Image Studio Tools">
         <button class="rail-btn active" data-tool="convert" type="button">
-          <span class="rail-icon">⚡</span>
+          <span class="rail-icon">
+            <svg class="icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13 2 4 14h7l-1 8 10-12h-7l0-8Z"/>
+            </svg>
+          </span>
           <span class="rail-label">Convert</span>
         </button>
+
         <button class="rail-btn" data-tool="transform" type="button">
-          <span class="rail-icon">✂️</span>
+          <span class="rail-icon">
+            <svg class="icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 2v14a2 2 0 0 0 2 2h14"/>
+              <path d="M18 22V8a2 2 0 0 0-2-2H2"/>
+            </svg>
+          </span>
           <span class="rail-label">Transform</span>
         </button>
+
         <button class="rail-btn" data-tool="slicer" type="button">
-          <span class="rail-icon">🎞️</span>
+          <span class="rail-icon">
+            <svg class="icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="2"/>
+              <path d="M9 4v16"/>
+              <path d="M15 4v16"/>
+            </svg>
+          </span>
           <span class="rail-label">Slicer</span>
         </button>
+
         <button class="rail-btn" data-tool="watermark" type="button">
-          <span class="rail-icon">©</span>
+          <span class="rail-icon">
+            <svg class="icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3H5a2 2 0 0 0-2 2v7l8.3 8.3a2.4 2.4 0 0 0 3.4 0l5.6-5.6a2.4 2.4 0 0 0 0-3.4L12 3Z"/>
+              <circle cx="7.5" cy="7.5" r="1.2"/>
+            </svg>
+          </span>
           <span class="rail-label">Watermark</span>
         </button>
+
         <button class="rail-btn" data-tool="color-redact" type="button">
-          <span class="rail-icon">🎨</span>
-          <span class="rail-label">Grade &amp; Blur</span>
+          <span class="rail-icon">
+            <svg class="icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <line x1="4" y1="6" x2="20" y2="6"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <line x1="4" y1="18" x2="20" y2="18"/>
+              <circle cx="9" cy="6" r="2.2" fill="currentColor"/>
+              <circle cx="15" cy="12" r="2.2" fill="currentColor"/>
+              <circle cx="11" cy="18" r="2.2" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="rail-label">Grade</span>
         </button>
+
         <button class="rail-btn" data-tool="cutout" type="button">
-          <span class="rail-icon">🪄</span>
+          <span class="rail-icon">
+            <svg class="icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3a9 9 0 1 0 9 9"/>
+              <path d="M12 3v18"/>
+              <path d="M12 8h6"/>
+              <path d="M12 12h9"/>
+              <path d="M12 16h6"/>
+            </svg>
+          </span>
           <span class="rail-label">Cutout</span>
         </button>
+
         <button class="rail-btn" data-tool="utilities" type="button">
-          <span class="rail-icon">🛡️</span>
+          <span class="rail-icon">
+            <svg class="icon-lg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </span>
           <span class="rail-label">EXIF &amp; Icons</span>
         </button>
       </nav>
@@ -93,18 +167,37 @@
       <!-- Center Viewport Stage + Bottom Filmstrip -->
       <section class="stage-column">
         <div id="stageViewport" class="stage-viewport">
+          <!-- Studio Calibration Corner Marks -->
+          <div class="stage-reticle top-left" aria-hidden="true"></div>
+          <div class="stage-reticle top-right" aria-hidden="true"></div>
+          <div class="stage-reticle bottom-left" aria-hidden="true"></div>
+          <div class="stage-reticle bottom-right" aria-hidden="true"></div>
+
           <!-- Empty Dropzone -->
           <div id="emptyDropzone" class="empty-dropzone">
             <div class="drop-aperture">
-              <img src="./favicon.svg" alt="" width="48" height="48" />
+              <img src="./favicon.svg" alt="" width="44" height="44" />
             </div>
+            <div class="drop-kicker">100% CLIENT-SIDE · ZERO UPLOADS</div>
             <h2>Drop images into the Darkroom</h2>
             <p>
-              Batch convert &amp; compress, slice carousels, strip EXIF/GPS tags, generate PWA favicon packs, redact, and cut out subjects — 100% locally in your browser.
+              Batch convert &amp; compress, slice carousels, strip EXIF/GPS tags, generate PWA icon packs, redact sensitive regions, and isolate subjects locally.
             </p>
             <div class="drop-actions">
-              <button id="heroUploadBtn" class="btn btn-primary" type="button">Select Images</button>
-              <span class="mono-text drop-hint">or drag &amp; drop / Ctrl+V paste anywhere</span>
+              <button id="heroUploadBtn" class="btn btn-primary" type="button">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="17 8 12 3 7 8"/>
+                  <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <span>Select Images</span>
+              </button>
+              <span class="drop-hint">or drag &amp; drop files / press Ctrl+V anywhere</span>
+            </div>
+            <div class="drop-capabilities">
+              <span>WebP · PNG · JPG · BMP · ICO</span>
+              <span>Offline AI Cutout</span>
+              <span>EXIF Scrubber</span>
             </div>
           </div>
 
@@ -118,8 +211,21 @@
         <!-- Batch Filmstrip Queue -->
         <div class="filmstrip-bar">
           <div class="filmstrip-header">
-            <span class="mono-text" id="queueCountLabel">QUEUE (0)</span>
-            <button id="clearQueueBtn" class="btn-mini hidden" type="button">Clear Queue</button>
+            <div class="filmstrip-title-wrap">
+              <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="M7 4v16"/>
+                <path d="M17 4v16"/>
+              </svg>
+              <span id="queueCountLabel">QUEUE (0)</span>
+            </div>
+            <button id="clearQueueBtn" class="btn-mini hidden" type="button">
+              <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 6 6 18"/>
+                <path d="m6 6 12 12"/>
+              </svg>
+              <span>Clear Queue</span>
+            </button>
           </div>
           <div id="queueStrip" class="queue-strip"></div>
         </div>
@@ -133,7 +239,12 @@
   </div>
 
   <!-- Toast Notification -->
-  <div id="toastBanner" class="toast-banner" role="status" aria-live="polite"></div>
+  <div id="toastBanner" class="toast-banner" role="status" aria-live="polite">
+    <svg class="icon-xs toast-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+    <span id="toastMessage"></span>
+  </div>
 
   <script type="module" src="./js/app.js"></script>
 </body>

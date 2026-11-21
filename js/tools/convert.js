@@ -15,8 +15,13 @@ export function mountConvertTool(container, studio) {
     <!-- 1. Output Format & Quality -->
     <div class="tool-section">
       <div class="section-title">
-        <span>Format &amp; Compression</span>
-        <span id="savingsBadge" class="badge-butter mono-text">—</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M13 2 4 14h7l-1 8 10-12h-7l0-8Z"/>
+          </svg>
+          <span>Format &amp; Compression</span>
+        </span>
+        <span id="savingsBadge" class="badge-butter tabular-nums">—</span>
       </div>
 
       <div class="field-group">
@@ -33,15 +38,15 @@ export function mountConvertTool(container, studio) {
       <div id="convQualityGroup" class="field-group">
         <div class="field-label-row">
           <label for="convQualityRange">Compression Quality</label>
-          <span id="convQualityVal" class="badge-butter mono-text">88%</span>
+          <span id="convQualityVal" class="badge-butter tabular-nums">88%</span>
         </div>
         <input type="range" id="convQualityRange" min="0.1" max="1" step="0.02" value="0.88" />
       </div>
 
       <div class="field-group">
         <label for="targetKbInput">Target Max File Size (KB, optional)</label>
-        <div style="display:flex; gap:0.4rem;">
-          <input type="number" id="targetKbInput" class="input-control mono-text" min="0" placeholder="e.g. 250 (0 = off)" />
+        <div style="display:flex; gap:0.38rem;">
+          <input type="number" id="targetKbInput" class="input-control tabular-nums" min="0" placeholder="0 = unlimited" />
           <button class="btn-mini kb-preset" data-kb="100" type="button">100KB</button>
           <button class="btn-mini kb-preset" data-kb="250" type="button">250KB</button>
           <button class="btn-mini kb-preset" data-kb="500" type="button">500KB</button>
@@ -52,19 +57,36 @@ export function mountConvertTool(container, studio) {
     <!-- 2. Export Summary & Actions -->
     <div class="tool-section">
       <div class="section-title">
-        <span>Export Summary</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>Export Summary</span>
+        </span>
       </div>
 
-      <div id="convStatsBox" class="stat-box mono-text">
+      <div id="convStatsBox" class="stat-box tabular-nums">
         Load an image to estimate converted file size.
       </div>
 
       <button id="exportSingleBtn" class="btn btn-primary btn-full" type="button">
-        Download Converted Image
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v11"/>
+          <path d="m7 11 5 5 5-5"/>
+          <path d="M5 20h14"/>
+        </svg>
+        <span>Download Converted Image</span>
       </button>
 
       <button id="exportBatchZipBtn" class="btn btn-butter btn-full hidden" type="button">
-        Batch Convert All Queued (ZIP)
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/>
+          <path d="M10 12h4"/>
+          <rect x="2" y="3" width="20" height="5" rx="1"/>
+        </svg>
+        <span>Batch Convert All Queued (ZIP)</span>
       </button>
     </div>
   `;
@@ -177,7 +199,6 @@ export function mountConvertTool(container, studio) {
       });
     }
 
-    // Restore active item in engine
     const current = studio.getActiveItem();
     if (current) studio.engine.setSource(current.bitmap, current.state);
 

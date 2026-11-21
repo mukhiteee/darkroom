@@ -36,6 +36,7 @@ class DarkroomStudio {
     this.queueStrip = document.getElementById('queueStrip');
     this.queueCountLabel = document.getElementById('queueCountLabel');
     this.activeImageMeta = document.getElementById('activeImageMeta');
+    this.metaLabel = this.activeImageMeta.querySelector('.meta-label');
 
     this.compareHoldBtn = document.getElementById('compareHoldBtn');
     this.resetAllEditsBtn = document.getElementById('resetAllEditsBtn');
@@ -43,6 +44,7 @@ class DarkroomStudio {
     this.clearQueueBtn = document.getElementById('clearQueueBtn');
     this.mainFileInput = document.getElementById('mainFileInput');
     this.toastBanner = document.getElementById('toastBanner');
+    this.toastMessage = document.getElementById('toastMessage');
 
     this.engine.onRender = () => this.paintViewportCanvas();
 
@@ -145,11 +147,12 @@ class DarkroomStudio {
     this.batchZipBtn.disabled = !hasItems;
     this.clearQueueBtn.classList.toggle('hidden', !hasItems);
     this.queueCountLabel.textContent = `QUEUE (${this.items.length})`;
+    this.activeImageMeta.classList.toggle('has-file', Boolean(active));
 
     if (!active) {
-      this.activeImageMeta.textContent = 'No image loaded — drop files or paste (Ctrl+V)';
+      this.metaLabel.textContent = 'No image loaded — drop files or press Ctrl+V';
     } else {
-      this.activeImageMeta.textContent = `${active.name} · ${active.bitmap.width}×${active.bitmap.height} · ${formatBytes(active.file.size)}`;
+      this.metaLabel.textContent = `${active.name} · ${active.bitmap.width}×${active.bitmap.height} · ${formatBytes(active.file.size)}`;
     }
   }
 
@@ -174,8 +177,8 @@ class DarkroomStudio {
     if (!active) return;
 
     const rendered = this.engine.renderPipeline(false, this.bypassPreview);
-    const maxW = Math.max(200, this.stageViewport.clientWidth - 40);
-    const maxH = Math.max(200, this.stageViewport.clientHeight - 40);
+    const maxW = Math.max(200, this.stageViewport.clientWidth - 48);
+    const maxH = Math.max(200, this.stageViewport.clientHeight - 48);
     const fitScale = Math.min(1, maxW / rendered.width, maxH / rendered.height);
 
     const cssW = Math.max(1, Math.round(rendered.width * fitScale));
@@ -207,7 +210,7 @@ class DarkroomStudio {
   }
 
   toast(message) {
-    this.toastBanner.textContent = message;
+    this.toastMessage.textContent = message;
     this.toastBanner.classList.add('show');
     clearTimeout(this._toastTimer);
     this._toastTimer = setTimeout(() => {

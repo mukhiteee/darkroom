@@ -13,29 +13,69 @@ export function mountCutoutTool(container, studio) {
   container.innerHTML = `
     <div class="tool-section">
       <div class="section-title">
-        <span>Background &amp; Cutout</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3a9 9 0 1 0 9 9"/>
+            <path d="M12 3v18"/>
+            <path d="M12 8h6"/>
+            <path d="M12 12h9"/>
+            <path d="M12 16h6"/>
+          </svg>
+          <span>Background &amp; Cutout</span>
+        </span>
         <span id="cutoutStatusBadge" class="badge-butter">Full</span>
       </div>
 
       <button id="aiAutoCutoutBtn" class="btn btn-primary btn-full" type="button">
-        ✨ AI Auto-Cutout (Cached Offline)
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>
+        </svg>
+        <span>AI Auto-Cutout (Cached Offline)</span>
       </button>
       <div id="aiProgressBox" class="stat-box hidden" style="font-size:0.74rem;"></div>
 
       <div class="row-2">
-        <button id="wandToolBtn" class="btn btn-secondary btn-sm" type="button">🪄 Magic Wand</button>
-        <button id="brushToolBtn" class="btn btn-secondary btn-sm" type="button">🖌️ Mask Brush</button>
+        <button id="wandToolBtn" class="btn btn-secondary btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 4V2"/>
+            <path d="M15 16v-2"/>
+            <path d="M8 9h2"/>
+            <path d="M20 9h2"/>
+            <path d="m17.8 11.8 1.4 1.4"/>
+            <path d="m17.8 6.2 1.4-1.4"/>
+            <path d="m3 21 9-9"/>
+          </svg>
+          <span>Magic Wand</span>
+        </button>
+        <button id="brushToolBtn" class="btn btn-secondary btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/>
+            <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/>
+          </svg>
+          <span>Mask Brush</span>
+        </button>
       </div>
 
       <div class="row-2">
-        <button id="polarityRemoveBtn" class="btn btn-butter btn-sm" type="button">− Select Out (Erase)</button>
-        <button id="polarityKeepBtn" class="btn btn-ghost btn-sm" type="button">+ Select In (Keep)</button>
+        <button id="polarityRemoveBtn" class="btn btn-butter btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Erase Region</span>
+        </button>
+        <button id="polarityKeepBtn" class="btn btn-ghost btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          <span>Keep Region</span>
+        </button>
       </div>
 
       <div id="wandOptionsGroup" class="field-group">
         <div class="field-label-row">
           <label for="wandTolRange">Wand Color Tolerance</label>
-          <span id="wandTolVal" class="badge-butter mono-text">34</span>
+          <span id="wandTolVal" class="badge-butter tabular-nums">34</span>
         </div>
         <input type="range" id="wandTolRange" min="4" max="120" step="2" value="34" />
 
@@ -48,7 +88,7 @@ export function mountCutoutTool(container, studio) {
       <div id="brushOptionsGroup" class="field-group hidden">
         <div class="field-label-row">
           <label for="brushSizeRange">Brush Diameter</label>
-          <span id="brushSizeVal" class="badge-butter mono-text">28px</span>
+          <span id="brushSizeVal" class="badge-butter tabular-nums">28px</span>
         </div>
         <input type="range" id="brushSizeRange" min="4" max="120" step="2" value="28" />
       </div>
@@ -56,7 +96,7 @@ export function mountCutoutTool(container, studio) {
       <div class="field-group">
         <div class="field-label-row">
           <label for="featherRange">Edge Softness / Feather</label>
-          <span id="featherVal" class="badge-butter mono-text">1px</span>
+          <span id="featherVal" class="badge-butter tabular-nums">1px</span>
         </div>
         <input type="range" id="featherRange" min="0" max="10" step="1" value="1" />
       </div>
@@ -70,7 +110,14 @@ export function mountCutoutTool(container, studio) {
 
     <div class="tool-section">
       <div class="section-title">
-        <span>Backdrop &amp; Portrait Bokeh</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="m21 15-5-5L5 21"/>
+          </svg>
+          <span>Backdrop &amp; Portrait Bokeh</span>
+        </span>
       </div>
 
       <div class="field-group">
@@ -87,20 +134,20 @@ export function mountCutoutTool(container, studio) {
       <div id="bgBokehGroup" class="field-group hidden">
         <div class="field-label-row">
           <label for="bokehBlurRange">Background Blur Radius</label>
-          <span id="bokehBlurVal" class="badge-butter mono-text">18px</span>
+          <span id="bokehBlurVal" class="badge-butter tabular-nums">18px</span>
         </div>
         <input type="range" id="bokehBlurRange" min="4" max="42" step="2" value="18" />
       </div>
 
       <div id="bgColorGroup" class="field-group hidden">
         <label for="bgSolidColorInput">Backdrop Color</label>
-        <div style="display:flex; align-items:center; gap:0.4rem;">
-          <input type="color" id="bgSolidColorInput" value="#FAF6EB" style="width:36px; height:30px; border:none; background:none; cursor:pointer;" />
+        <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+          <input type="color" id="bgSolidColorInput" value="#FAF6EB" />
           <button class="btn-mini bg-swatch" data-color="#FAF6EB" type="button">Cream</button>
           <button class="btn-mini bg-swatch" data-color="#F6E6AD" type="button">Butter</button>
-          <button class="btn-mini bg-swatch" data-color="#236B3D" type="button">Leaf</button>
+          <button class="btn-mini bg-swatch" data-color="#2D8A50" type="button">Leaf</button>
           <button class="btn-mini bg-swatch" data-color="#FFFFFF" type="button">White</button>
-          <button class="btn-mini bg-swatch" data-color="#0E1210" type="button">Black</button>
+          <button class="btn-mini bg-swatch" data-color="#0B0E0C" type="button">Obsidian</button>
         </div>
       </div>
 
@@ -108,7 +155,7 @@ export function mountCutoutTool(container, studio) {
         <div class="row-2">
           <div>
             <label for="bgGradStartInput">Start Color</label>
-            <input type="color" id="bgGradStartInput" value="#236B3D" class="input-control" style="height:34px; padding:2px;" />
+            <input type="color" id="bgGradStartInput" value="#2D8A50" class="input-control" style="height:34px; padding:2px;" />
           </div>
           <div>
             <label for="bgGradEndInput">End Color</label>
@@ -329,8 +376,8 @@ export function mountCutoutTool(container, studio) {
       ">
         <div id="brushRingCursor" style="
           position:absolute; width:${brushSize}px; height:${brushSize}px;
-          border-radius:50%; border:2px solid ${polarity === 'remove' ? '#F6E6AD' : '#4ADE80'};
-          background:rgba(35, 107, 61, 0.18); transform:translate(-50%, -50%);
+          border-radius:50%; border:2px solid ${polarity === 'remove' ? '#F6E6AD' : '#3BB268'};
+          background:rgba(45, 138, 80, 0.18); transform:translate(-50%, -50%);
           pointer-events:none; display:${activePointerTool === 'brush' ? 'block' : 'none'};
         "></div>
       </div>

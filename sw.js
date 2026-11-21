@@ -1,4 +1,4 @@
-const SHELL_CACHE = 'darkroom-shell-v3';
+const SHELL_CACHE = 'darkroom-shell-v4';
 const AI_MODEL_CACHE = 'darkroom-ai-weights-v1';
 
 const SHELL_ASSETS = [
@@ -46,7 +46,6 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
 
-  // Cache-first for on-demand AI segmentation weights / WASM from jsDelivr
   if (url.hostname.includes('jsdelivr.net') || url.hostname.includes('staticimgly.com')) {
     event.respondWith(
       caches.open(AI_MODEL_CACHE).then(async (cache) => {
@@ -60,7 +59,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first with network fallback for local app shell
   event.respondWith(
     caches.match(request).then((cached) => cached || fetch(request))
   );

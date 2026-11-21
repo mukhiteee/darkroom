@@ -27,10 +27,17 @@ export function mountColorRedactTool(container, studio) {
   container.innerHTML = `
     <div class="tool-section">
       <div class="section-title">
-        <span>Studio Presets</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3v18"/>
+            <path d="M12 12 18.4 5.6"/>
+          </svg>
+          <span>Studio Presets</span>
+        </span>
         <button id="resetColorBtn" class="btn-mini" type="button">Reset</button>
       </div>
-      <div id="colorPresetGrid" style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+      <div id="colorPresetGrid" class="chip-grid">
         ${COLOR_PRESETS.map(
           (p, idx) =>
             `<button class="btn-mini color-preset-btn ${idx === 0 ? 'active' : ''}" data-idx="${idx}" type="button">${p.name}</button>`
@@ -40,7 +47,17 @@ export function mountColorRedactTool(container, studio) {
 
     <div class="tool-section">
       <div class="section-title">
-        <span>Light &amp; Color Grading</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="4" y1="12" x2="20" y2="12"/>
+            <line x1="4" y1="18" x2="20" y2="18"/>
+            <circle cx="9" cy="6" r="2" fill="currentColor"/>
+            <circle cx="15" cy="12" r="2" fill="currentColor"/>
+            <circle cx="11" cy="18" r="2" fill="currentColor"/>
+          </svg>
+          <span>Light &amp; Color Grading</span>
+        </span>
       </div>
 
       ${[
@@ -56,7 +73,7 @@ export function mountColorRedactTool(container, studio) {
         <div class="field-group">
           <div class="field-label-row">
             <label for="grade_${s.id}">${s.label}</label>
-            <span id="val_${s.id}" class="badge-butter mono-text">0${s.unit}</span>
+            <span id="val_${s.id}" class="badge-butter tabular-nums">0${s.unit}</span>
           </div>
           <input type="range" id="grade_${s.id}" data-key="${s.id}" data-unit="${s.unit}" min="${s.min}" max="${s.max}" step="1" value="0" />
         </div>
@@ -67,18 +84,32 @@ export function mountColorRedactTool(container, studio) {
 
     <div class="tool-section">
       <div class="section-title">
-        <span>Dominant Palette</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m2 22 1-1h3l9-9"/>
+            <path d="M3 21v-3l9-9"/>
+            <path d="m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z"/>
+          </svg>
+          <span>Dominant Palette</span>
+        </span>
         <button id="copyAllHexBtn" class="btn-mini" type="button">Copy All</button>
       </div>
-      <div id="paletteSwatches" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.4rem;">
+      <div id="paletteSwatches" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.42rem;">
         <div class="stat-box" style="grid-column:1 / -1;">Load an image to extract HEX palette.</div>
       </div>
     </div>
 
     <div class="tool-section">
       <div class="section-title">
-        <span>Privacy Redaction</span>
-        <span id="redactCountBadge" class="badge-butter mono-text">0 boxes</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M8 10h8"/>
+            <path d="M8 14h5"/>
+          </svg>
+          <span>Privacy Redaction</span>
+        </span>
+        <span id="redactCountBadge" class="badge-butter tabular-nums">0 boxes</span>
       </div>
 
       <div class="row-2">
@@ -94,7 +125,7 @@ export function mountColorRedactTool(container, studio) {
         <div class="field-group">
           <div class="field-label-row">
             <label for="redactStrengthRange">Intensity</label>
-            <span id="redactStrengthVal" class="badge-butter mono-text">18px</span>
+            <span id="redactStrengthVal" class="badge-butter tabular-nums">18px</span>
           </div>
           <input type="range" id="redactStrengthRange" min="6" max="48" step="2" value="18" />
         </div>
@@ -259,14 +290,10 @@ export function mountColorRedactTool(container, studio) {
     paletteSwatches.innerHTML = swatches
       .map(
         (s) => `
-        <button class="palette-chip" data-hex="${s.hex}" type="button" title="Copy ${s.hex}" style="
-          display:flex; flex-direction:column; align-items:flex-start; gap:0.25rem;
-          padding:0.4rem; border-radius:8px; border:1px solid rgba(35,107,61,0.22);
-          background:var(--surface-elevated, #FAF6EB); cursor:pointer; text-align:left;
-        ">
-          <span style="width:100%; height:24px; border-radius:5px; background:${s.hex}; border:1px solid rgba(0,0,0,0.12);"></span>
-          <span class="mono-text" style="font-size:0.71rem; font-weight:700;">${s.hex}</span>
-          <span style="font-size:0.65rem; opacity:0.7;">${s.pct}%</span>
+        <button class="palette-chip" data-hex="${s.hex}" type="button" title="Copy ${s.hex}">
+          <span style="width:100%; height:24px; border-radius:5px; background:${s.hex}; border:1px solid rgba(255,255,255,0.16);"></span>
+          <span class="tabular-nums" style="font-size:0.72rem; font-weight:700;">${s.hex}</span>
+          <span class="tabular-nums" style="font-size:0.65rem; color:var(--text-secondary);">${s.pct}%</span>
         </button>
       `
       )
@@ -285,7 +312,7 @@ export function mountColorRedactTool(container, studio) {
       ">
         <div id="redactDraftBox" style="
           position:absolute; display:none; border:2px dashed #F6E6AD;
-          background:rgba(35, 107, 61, 0.28); pointer-events:none;
+          background:rgba(45, 138, 80, 0.28); pointer-events:none;
         "></div>
       </div>
     `;

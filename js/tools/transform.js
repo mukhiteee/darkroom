@@ -8,6 +8,9 @@ const ASPECT_PRESETS = [
   { label: '4:3', ratio: 4 / 3 }
 ];
 
+const SVG_LOCK_CLOSED = `<svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Locked</span>`;
+const SVG_LOCK_OPEN = `<svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-1.9"/></svg><span>Unlocked</span>`;
+
 export function mountTransformTool(container, studio) {
   let cropEditMode = false;
   let selectedRatio = null;
@@ -18,25 +21,69 @@ export function mountTransformTool(container, studio) {
     <!-- 1. Rotate & Flip -->
     <div class="tool-section">
       <div class="section-title">
-        <span>Rotate &amp; Flip</span>
-        <span id="rotAngleBadge" class="badge-butter mono-text">0°</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-3-6.7L21 8"/>
+            <path d="M21 3v5h-5"/>
+          </svg>
+          <span>Rotate &amp; Flip</span>
+        </span>
+        <span id="rotAngleBadge" class="badge-butter tabular-nums">0°</span>
       </div>
       <div class="row-2">
-        <button id="rotLeftBtn" class="btn btn-secondary btn-sm" type="button">↺ Rotate -90°</button>
-        <button id="rotRightBtn" class="btn btn-secondary btn-sm" type="button">↻ Rotate +90°</button>
-        <button id="flipHBtn" class="btn btn-secondary btn-sm" type="button">⇄ Flip Horiz</button>
-        <button id="flipVBtn" class="btn btn-secondary btn-sm" type="button">⇅ Flip Vert</button>
+        <button id="rotLeftBtn" class="btn btn-secondary btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          <span>Rotate -90°</span>
+        </button>
+        <button id="rotRightBtn" class="btn btn-secondary btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12a9 9 0 1 1-3-6.7L21 8"/>
+            <path d="M21 3v5h-5"/>
+          </svg>
+          <span>Rotate +90°</span>
+        </button>
+        <button id="flipHBtn" class="btn btn-secondary btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 3H5a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h3"/>
+            <path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3"/>
+            <path d="M12 20v2"/>
+            <path d="M12 14v2"/>
+            <path d="M12 8v2"/>
+            <path d="M12 2v2"/>
+          </svg>
+          <span>Flip Horiz</span>
+        </button>
+        <button id="flipVBtn" class="btn btn-secondary btn-sm" type="button">
+          <svg class="icon-xs" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3"/>
+            <path d="M21 16v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3"/>
+            <path d="M4 12H2"/>
+            <path d="M10 12H8"/>
+            <path d="M16 12h-2"/>
+            <path d="M22 12h-2"/>
+          </svg>
+          <span>Flip Vert</span>
+        </button>
       </div>
     </div>
 
     <!-- 2. Interactive Aspect Ratio Cropper -->
     <div class="tool-section">
       <div class="section-title">
-        <span>Aspect Ratio Crop</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 2v14a2 2 0 0 0 2 2h14"/>
+            <path d="M18 22V8a2 2 0 0 0-2-2H2"/>
+          </svg>
+          <span>Aspect Ratio Crop</span>
+        </span>
         <span id="cropStatusBadge" class="badge-butter">Full</span>
       </div>
 
-      <div id="cropPresetGrid" style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+      <div id="cropPresetGrid" class="chip-grid">
         ${ASPECT_PRESETS.map(
           (p, i) =>
             `<button class="btn-mini crop-preset-btn ${i === 0 ? 'active' : ''}" data-idx="${i}" type="button">${p.label}</button>`
@@ -56,24 +103,34 @@ export function mountTransformTool(container, studio) {
     <!-- 3. Smart Resizer -->
     <div class="tool-section">
       <div class="section-title">
-        <span>Smart Resize</span>
-        <button id="lockAspectBtn" class="btn-mini" type="button" title="Toggle Aspect Ratio Lock">🔒 Locked</button>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="15 3 21 3 21 9"/>
+            <polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/>
+            <line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+          <span>Smart Resize</span>
+        </span>
+        <button id="lockAspectBtn" class="btn-mini active" type="button" title="Toggle Aspect Ratio Lock">
+          ${SVG_LOCK_CLOSED}
+        </button>
       </div>
 
       <div class="row-2">
         <div class="field-group">
           <label for="resizeWInput">Width (px)</label>
-          <input type="number" id="resizeWInput" class="input-control mono-text" min="1" max="16000" />
+          <input type="number" id="resizeWInput" class="input-control tabular-nums" min="1" max="16000" />
         </div>
         <div class="field-group">
           <label for="resizeHInput">Height (px)</label>
-          <input type="number" id="resizeHInput" class="input-control mono-text" min="1" max="16000" />
+          <input type="number" id="resizeHInput" class="input-control tabular-nums" min="1" max="16000" />
         </div>
       </div>
 
       <div class="field-group">
         <label>Quick Scale &amp; Long-Edge Presets</label>
-        <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+        <div class="chip-grid">
           <button class="btn-mini scale-pct-btn" data-scale="0.25" type="button">25%</button>
           <button class="btn-mini scale-pct-btn" data-scale="0.5" type="button">50%</button>
           <button class="btn-mini scale-pct-btn" data-scale="0.75" type="button">75%</button>
@@ -91,7 +148,13 @@ export function mountTransformTool(container, studio) {
     <!-- 4. Fit-to-Frame / Social Padding -->
     <div class="tool-section">
       <div class="section-title">
-        <span>Social Frame Padding</span>
+        <span class="section-title-left">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <rect x="7" y="7" width="10" height="10" rx="1"/>
+          </svg>
+          <span>Social Frame Padding</span>
+        </span>
       </div>
 
       <div class="row-2">
@@ -117,12 +180,12 @@ export function mountTransformTool(container, studio) {
 
       <div id="frameColorGroup" class="field-group hidden">
         <label for="frameColorInput">Border Color</label>
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <input type="color" id="frameColorInput" value="#FAF6EB" style="width:38px; height:32px; border:none; background:none; cursor:pointer;" />
+        <div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+          <input type="color" id="frameColorInput" value="#FAF6EB" />
           <button class="btn-mini frame-swatch" data-color="#FAF6EB" type="button">Butter</button>
-          <button class="btn-mini frame-swatch" data-color="#236B3D" type="button">Leaf</button>
+          <button class="btn-mini frame-swatch" data-color="#2D8A50" type="button">Leaf</button>
           <button class="btn-mini frame-swatch" data-color="#FFFFFF" type="button">White</button>
-          <button class="btn-mini frame-swatch" data-color="#0E1210" type="button">Black</button>
+          <button class="btn-mini frame-swatch" data-color="#0B0E0C" type="button">Obsidian</button>
         </div>
       </div>
     </div>
@@ -216,7 +279,7 @@ export function mountTransformTool(container, studio) {
         width: ${draftCrop.w * 100}%;
         height: ${draftCrop.h * 100}%;
         border: 2px solid #F6E6AD;
-        box-shadow: 0 0 0 9999px rgba(10, 14, 12, 0.58);
+        box-shadow: 0 0 0 9999px rgba(8, 10, 9, 0.68);
         cursor: move;
         pointer-events: auto;
         touch-action: none;
@@ -232,10 +295,10 @@ export function mountTransformTool(container, studio) {
           <div style="border-right:1px solid rgba(246,230,173,0.35);"></div>
           <div></div>
         </div>
-        <div data-handle="nw" style="position:absolute; top:-6px; left:-6px; width:13px; height:13px; background:#236B3D; border:2px solid #F6E6AD; border-radius:3px; cursor:nwse-resize;"></div>
-        <div data-handle="ne" style="position:absolute; top:-6px; right:-6px; width:13px; height:13px; background:#236B3D; border:2px solid #F6E6AD; border-radius:3px; cursor:nesw-resize;"></div>
-        <div data-handle="sw" style="position:absolute; bottom:-6px; left:-6px; width:13px; height:13px; background:#236B3D; border:2px solid #F6E6AD; border-radius:3px; cursor:nesw-resize;"></div>
-        <div data-handle="se" style="position:absolute; bottom:-6px; right:-6px; width:13px; height:13px; background:#236B3D; border:2px solid #F6E6AD; border-radius:3px; cursor:nwse-resize;"></div>
+        <div data-handle="nw" style="position:absolute; top:-6px; left:-6px; width:13px; height:13px; background:#2D8A50; border:2px solid #F6E6AD; border-radius:3px; cursor:nwse-resize;"></div>
+        <div data-handle="ne" style="position:absolute; top:-6px; right:-6px; width:13px; height:13px; background:#2D8A50; border:2px solid #F6E6AD; border-radius:3px; cursor:nesw-resize;"></div>
+        <div data-handle="sw" style="position:absolute; bottom:-6px; left:-6px; width:13px; height:13px; background:#2D8A50; border:2px solid #F6E6AD; border-radius:3px; cursor:nesw-resize;"></div>
+        <div data-handle="se" style="position:absolute; bottom:-6px; right:-6px; width:13px; height:13px; background:#2D8A50; border:2px solid #F6E6AD; border-radius:3px; cursor:nwse-resize;"></div>
       </div>
     `;
 
@@ -405,7 +468,8 @@ export function mountTransformTool(container, studio) {
 
   lockAspectBtn.addEventListener('click', () => {
     aspectLocked = !aspectLocked;
-    lockAspectBtn.textContent = aspectLocked ? '🔒 Locked' : '🔓 Unlocked';
+    lockAspectBtn.innerHTML = aspectLocked ? SVG_LOCK_CLOSED : SVG_LOCK_OPEN;
+    lockAspectBtn.classList.toggle('active', aspectLocked);
   });
 
   resizeWInput.addEventListener('input', () => {

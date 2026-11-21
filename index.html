@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darkroom — Local-First Browser Image Studio</title>
+  <meta name="description" content="Offline-first browser image studio & PWA. Batch convert/compress, slice carousels, crop, watermark, strip EXIF/GPS metadata, generate favicons, extract HEX palettes, redact, and remove backgrounds locally." />
+  <meta name="theme-color" content="#236B3D" />
+
+  <!-- Open Graph / Social Preview -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Darkroom — Local-First Browser Image Studio" />
+  <meta property="og:description" content="Zero uploads, zero servers, 100% client-side image studio & offline PWA." />
+  <meta property="og:image" content="./og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Darkroom — Local-First Browser Image Studio" />
+  <meta name="twitter:image" content="./og-image.png" />
+
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Studio Bar -->
+    <header class="topbar">
+      <div class="brand">
+        <img src="./favicon.svg" alt="Darkroom Aperture" class="brand-icon" />
+        <div>
+          <div class="brand-title">Darkroom</div>
+          <div class="brand-sub">LOCAL-FIRST IMAGE STUDIO</div>
+        </div>
+      </div>
+
+      <div class="topbar-meta" id="activeImageMeta">
+        No image loaded — drop files or paste (Ctrl+V)
+      </div>
+
+      <div class="topbar-actions">
+        <button id="compareHoldBtn" class="btn btn-ghost btn-sm" type="button" disabled title="Hold to view original unedited image">
+          👁 Hold Original
+        </button>
+        <button id="resetAllEditsBtn" class="btn btn-ghost btn-sm" type="button" disabled>
+          ↺ Reset Edits
+        </button>
+        <button id="addFilesBtn" class="btn btn-secondary btn-sm" type="button">
+          + Add Images
+        </button>
+        <button id="batchZipBtn" class="btn btn-primary btn-sm" type="button" disabled>
+          ↓ Export All (ZIP)
+        </button>
+        <input type="file" id="mainFileInput" accept="image/*" multiple hidden />
+      </div>
+    </header>
+
+    <!-- Main 3-Column Studio Workspace -->
+    <main class="workspace">
+      <!-- Left Tool Rail -->
+      <nav class="tool-rail" aria-label="Image Studio Tools">
+        <button class="rail-btn active" data-tool="convert" type="button">
+          <span class="rail-icon">⚡</span>
+          <span class="rail-label">Convert</span>
+        </button>
+        <button class="rail-btn" data-tool="transform" type="button">
+          <span class="rail-icon">✂️</span>
+          <span class="rail-label">Transform</span>
+        </button>
+        <button class="rail-btn" data-tool="slicer" type="button">
+          <span class="rail-icon">🎞️</span>
+          <span class="rail-label">Slicer</span>
+        </button>
+        <button class="rail-btn" data-tool="watermark" type="button">
+          <span class="rail-icon">©</span>
+          <span class="rail-label">Watermark</span>
+        </button>
+        <button class="rail-btn" data-tool="color-redact" type="button">
+          <span class="rail-icon">🎨</span>
+          <span class="rail-label">Grade &amp; Blur</span>
+        </button>
+        <button class="rail-btn" data-tool="cutout" type="button">
+          <span class="rail-icon">🪄</span>
+          <span class="rail-label">Cutout</span>
+        </button>
+        <button class="rail-btn" data-tool="utilities" type="button">
+          <span class="rail-icon">🛡️</span>
+          <span class="rail-label">EXIF &amp; Icons</span>
+        </button>
+      </nav>
+
+      <!-- Center Viewport Stage + Bottom Filmstrip -->
+      <section class="stage-column">
+        <div id="stageViewport" class="stage-viewport">
+          <!-- Empty Dropzone -->
+          <div id="emptyDropzone" class="empty-dropzone">
+            <div class="drop-aperture">
+              <img src="./favicon.svg" alt="" width="48" height="48" />
+            </div>
+            <h2>Drop images into the Darkroom</h2>
+            <p>
+              Batch convert &amp; compress, slice carousels, strip EXIF/GPS tags, generate PWA favicon packs, redact, and cut out subjects — 100% locally in your browser.
+            </p>
+            <div class="drop-actions">
+              <button id="heroUploadBtn" class="btn btn-primary" type="button">Select Images</button>
+              <span class="mono-text drop-hint">or drag &amp; drop / Ctrl+V paste anywhere</span>
+            </div>
+          </div>
+
+          <!-- Active Canvas & Interactive Overlay Layer -->
+          <div id="canvasFrame" class="canvas-frame hidden">
+            <canvas id="displayCanvas"></canvas>
+            <div id="overlayLayer"></div>
+          </div>
+        </div>
+
+        <!-- Batch Filmstrip Queue -->
+        <div class="filmstrip-bar">
+          <div class="filmstrip-header">
+            <span class="mono-text" id="queueCountLabel">QUEUE (0)</span>
+            <button id="clearQueueBtn" class="btn-mini hidden" type="button">Clear Queue</button>
+          </div>
+          <div id="queueStrip" class="queue-strip"></div>
+        </div>
+      </section>
+
+      <!-- Right Tool Inspector -->
+      <aside class="inspector-panel">
+        <div id="toolPanelContainer" class="inspector-scroll"></div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastBanner" class="toast-banner" role="status" aria-live="polite"></div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

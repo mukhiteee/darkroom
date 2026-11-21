@@ -1,0 +1,17 @@
+{
+  "name": "Darkroom — Local-First Image Studio",
+  "short_name": "Darkroom",
+  "description": "Offline-first browser image studio & PWA for batch conversion, carousel slicing, watermarking, EXIF stripping, favicon generation, color grading, redaction, and background cutout.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F8F4E8",
+  "theme_color": "#236B3D",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
